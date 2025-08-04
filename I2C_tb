@@ -1,0 +1,24 @@
+module i2c_tb;
+reg clk,reset,start;
+reg [7:0] address,data_in;
+
+wire [7:0] data_out;
+
+wire sda,scl;
+
+I2C_master master (sda,scl,reset,start,clk,data_in,address,data_out);
+i2c_slave slave (sda,scl);
+
+initial clk=1'b0;
+always #1 clk = ~clk;
+
+initial begin
+address = 8'b10101101; //indicates read
+data_in = 8'b10101011;
+reset =1;
+#5 reset=0;
+start=1;
+#40 start=0;
+#5 $finish;
+end
+endmodule
